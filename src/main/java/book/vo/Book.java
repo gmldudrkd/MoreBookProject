@@ -14,8 +14,11 @@ public class Book {
 	
 	protected String posttitle;
 	protected String postdesc;
-	protected String posttext;
 	protected Date postDate;
+	protected String readDatest;
+	protected String readDateen;
+	protected Date updateDate;
+	protected String evaluate;
 	
 	
 	public String getPosttitle() {
@@ -32,18 +35,39 @@ public class Book {
 		this.postdesc = postdesc;
 		return this;
 	}
-	public String getPosttext() {
-		return posttext;
-	}
-	public Book setPosttext(String posttext) {
-		this.posttext = posttext;
-		return this;
-	}
 	public Date getPostDate() {
 		return postDate;
 	}
 	public Book setPostDate(Date postDate) {
 		this.postDate = postDate;
+		return this;
+	}
+	public String getReadDatest() {
+		return readDatest;
+	}
+	public Book setReadDatest(String readDatest) {
+		this.readDatest = readDatest;
+		return this;
+	}
+	public String getReadDateen() {
+		return readDateen;
+	}
+	public Book setReadDateen(String readDateen) {
+		this.readDateen = readDateen;
+		return this;
+	}
+	public String getEvaluate() {
+		return evaluate;
+	}
+	public Book setEvaluate(String evaluate) {
+		this.evaluate = evaluate;
+		return this;
+	}
+	public Date getUpdateDate() {
+		return updateDate;
+	}
+	public Book setUpdateDate(Date updateDate) {
+		this.updateDate = updateDate;
 		return this;
 	}
 	

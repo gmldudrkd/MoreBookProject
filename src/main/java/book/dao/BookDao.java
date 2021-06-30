@@ -18,6 +18,29 @@ public class BookDao {
 		this.ds = ds;
 	}
 	
+	public int insertPostbook(Book book) throws Exception{
+		Connection connection = null;
+		PreparedStatement stmt = null;
+		try {
+			connection = ds.getConnection();
+			stmt = connection.prepareStatement(
+						"INSERT into post (posttitle, postdesc , evaluate,  readDatest,  readDateen,postDate, updateDate) "+
+						"VALUES (?,?,?,?,?,NOW(),NOW())"
+					);
+			stmt.setString(1, book.getPosttitle());
+			stmt.setString(2, book.getPostdesc());
+			stmt.setString(3, book.getEvaluate());
+			stmt.setString(4, book.getReadDatest());
+			stmt.setString(5, book.getReadDateen());
+			
+			return stmt.executeUpdate();
+		 }catch(Exception e) {
+			 throw e;
+		 }finally {
+			 try { if(connection != null) connection.close(); } catch(Exception e){ }
+		 }
+	}
+	
 	//회원가입
 	public int insertauth(Book book) throws Exception{
 		Connection connection = null;
@@ -56,6 +79,86 @@ public class BookDao {
 			}else {
 		        return null;
 		      }
+		}catch(Exception e) {
+			throw e;
+		}finally {
+			try { if(connection != null) connection.close(); } catch(Exception e){ }
+		 }
+	}
+	
+	//독후감리스트
+	public List<Book> booklist() throws Exception{
+		Connection connection = null;
+		Statement stmt = null;
+		ResultSet rs = null;
+		try {
+			connection = ds.getConnection();
+			stmt = connection.createStatement();
+			rs = stmt.executeQuery("SELECT * FROM post ORDER BY no DESC");
+			ArrayList<Book> books = new ArrayList<Book>();
+			
+			while(rs.next()) {
+				books.add(new Book().setNo(rs.getInt("no"))
+						.setEvaluate(rs.getString("evaluate"))
+						.setPosttitle(rs.getString("posttitle"))
+						.setPostdesc(rs.getString("postdesc"))
+						.setReadDatest(rs.getString("readDatest"))
+						.setReadDateen(rs.getString("readDateen"))
+						.setUpdateDate(rs.getDate("updateDate"))
+						.setPostDate(rs.getDate("postDate")));
+			}
+			return books;
+		}catch(Exception e) {
+			throw e;
+		}finally {
+			try { if(rs != null) rs.close(); } catch(Exception e){ }
+			try { if(stmt != null) stmt.close(); } catch(Exception e){ }
+			try { if(connection != null) connection.close(); } catch(Exception e){ }
+		}	
+	}
+	
+	public Book bookselect(int no) throws Exception {
+		Connection connection = null;
+		Statement stmt = null;
+		ResultSet rs = null;
+		try {
+			connection = ds.getConnection();
+			stmt = connection.createStatement();
+			rs = stmt.executeQuery("SELECT * FROM post where no='"+no+"' ");
+
+			if(rs.next()) {
+				return new Book().setNo(rs.getInt("no"))
+						.setEvaluate(rs.getString("evaluate"))
+						.setPosttitle(rs.getString("posttitle"))
+						.setPostdesc(rs.getString("postdesc"))
+						.setReadDatest(rs.getString("readDatest"))
+						.setReadDateen(rs.getString("readDateen"))
+						.setUpdateDate(rs.getDate("updateDate"))
+						.setPostDate(rs.getDate("postDate"));
+			}else {
+		        throw new Exception("해당 번호의 회원을 찾을 수 없습니다.");
+	      }
+		}catch(Exception e) {
+			throw e;
+		}finally {
+			try { if(rs != null) rs.close(); } catch(Exception e){ }
+			try { if(stmt != null) stmt.close(); } catch(Exception e){ }
+			try { if(connection != null) connection.close(); } catch(Exception e){ }
+		}	
+	}
+	
+	public int updatePostbook(Book book) throws Exception {
+		Connection connection = null;
+		PreparedStatement stmt = null;
+		try {
+			connection = ds.getConnection();
+			stmt = connection.prepareStatement("update post set posttitle=?, postdesc=?, readDatest=?, readDateen=?, updateDate=now() where no=?");
+			stmt.setString(1, book.getPosttitle());
+			stmt.setString(2, book.getPostdesc());
+			stmt.setString(3, book.getReadDatest());
+			stmt.setString(4, book.getReadDateen());
+			stmt.setInt(5, book.getNo());
+			return stmt.executeUpdate();
 		}catch(Exception e) {
 			throw e;
 		}finally {
